@@ -1,0 +1,60 @@
+#!markdown
+
+# List
+
+#!markdown
+
+## ForEach
+
+#!csharp
+
+var meuArray = new int[5] {0, 2, 4, 6, 8};
+
+foreach (int i in meuArray)
+{
+	Console.WriteLine(i);
+}
+
+#!markdown
+
+---
+OU
+
+#!csharp
+
+public struct Funcionario
+{
+	public int Id { get; set; }
+	public string Nome { get; set; }
+}
+
+#!csharp
+
+for (int i = 0; i < funcionarios.Length; i++)
+{
+	funcionarios[i] = new Funcionario { Id = i };
+}
+
+#!csharp
+
+var funcionarios = new Funcionario[5];
+
+funcionarios[0] = new Funcionario { Id = 536, Nome = "João" };
+
+foreach (var funcionario in funcionarios)
+{
+	Console.WriteLine(funcionario.Id);
+	Console.WriteLine(funcionario.Nome);
+}
+
+#!csharp
+
+var arr0 = new int[4];
+var arr1 = arr0; // referência para o arr0 
+
+#!csharp
+
+for (int i = 0; i < arr0.Length; i++)
+{
+	arr1.CopyTo(arr0, 0);
+}
