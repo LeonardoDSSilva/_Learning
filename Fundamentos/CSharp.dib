@@ -58,3 +58,31 @@ for (int i = 0; i < arr0.Length; i++)
 {
 	arr1.CopyTo(arr0, 0);
 }
+
+#!markdown
+
+# Exceptions
+
+Do mais específico para o mais genérico
+
+#!csharp
+
+var arr = new int[4];
+
+try{
+		for (int i = 0; i < 10; i++)
+	{
+		//System.IndexOutOfRangeException: Index was outside the bounds of the array
+		Console.WriteLine(arr[i]);
+	}
+} catch (IndexOutOfRangeException ex) { //Especificado o tipo de erro
+	Console.WriteLine(ex.InnerException);
+	Console.WriteLine(ex.Message);
+	Console.WriteLine("Não foi possível acessar o índice do array");
+} catch(Exception ex){ 
+	Console.WriteLine("Aconteceu um erro: " + ex.Message);
+	Console.WriteLine("InnerException: " + ex.InnerException);
+}
+finally{
+	Console.WriteLine("Fim do programa");
+}
