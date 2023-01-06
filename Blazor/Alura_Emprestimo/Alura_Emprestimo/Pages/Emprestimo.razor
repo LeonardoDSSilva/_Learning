@@ -1,0 +1,32 @@
+﻿<h1>Simulador de empréstimo</h1>
+
+
+	<div class="form-group">
+		<label for="valor">Valor do empréstimo</label>
+		<InputNumber @bind-Value="valor" class="form-control" />
+	</div>
+	<div class="form-group">
+		<label for="taxa">Taxa de juros</label>
+	<InputNumber @bind-Value="parcelas" class="form-control" />
+	</div>
+
+	<button @onclick="CalcularEmprestimo" class="btn btn-primary">Calcular</button>
+	
+<label>O Total do empréstimo a ser pago é: <span>@total</span></label>
+<br />
+<label> Em x <span>@parcelas</span> parcelas de: <span>@valorParcelas</span></label>
+
+@code {
+	private double valor { get; set; }
+	private int parcelas { get; set; }
+	private double total { get; set; }
+	private double valorParcelas { get; set; }
+
+	private void CalcularEmprestimo()
+	{
+		total = valor + (valor * (parcelas *0.0284));
+		valorParcelas = Math.Round(total / parcelas, 2);
+	}
+	
+	
+}
