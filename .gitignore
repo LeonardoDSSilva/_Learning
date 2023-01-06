@@ -11,3 +11,4 @@ _ReSharper.*
 *.vscc 
 *.vssscc
 .vscode
+.vs
