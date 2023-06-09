@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Photon</title>
+
+	<meta charset="UTF-8">
+	<!-- <meta http-equiv="Content-Security-Policy"
+		content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"> -->
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="assets/css/photon.css">
+	<link rel="stylesheet" href="assets/css/styles.css">
+
+	<!-- Electron Javascript -->
+	<!-- <script src="app.js" charset="utf-8"></script> -->
+
+</head>
+
+<body>
+
+	<div class="window">
+		<header class="toolbar toolbar-header">
+			<h1 class="title">Loja XS</h1>
+			<div class="toolbar-actions">
+				<div class="btn-group">
+					<button class="btn btn-default">
+						<span class="icon icon-home"></span>
+					</button>
+					<button class="btn btn-default">
+						<span class="icon icon-folder"></span>
+					</button>
+					<button class="btn btn-default active">
+						<span class="icon icon-cloud"></span>
+					</button>
+					<button class="btn btn-default">
+						<span class="icon icon-popup"></span>
+					</button>
+					<button class="btn btn-default">
+						<span class="icon icon-shuffle"></span>
+					</button>
+				</div>
+
+				<button class="btn btn-default">
+					<span class="icon icon-home icon-text"></span>
+					Filters
+				</button>
+
+				<button class="btn btn-default btn-dropdown pull-right">
+					<span class="icon icon-megaphone"></span>
+				</button>
+			</div>
+		</header>
+		<div class="window-content">
+			<div class="pane-group">
+				<div class="pane-sm sidebar">...</div>
+				<div class="pane">
+					<div id="app">{{ message }}</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="toolbar toolbar-footer">
+		<h1 class="title">Desenvolvido por: @leonardodssilva</h1>
+	</footer>
+	</div>
+</body>
+<script>
+	let read = require('read-file-utf8');
+	let loki = require('lokijs');
+	let db = new loki('db.json');
+	let data = read(__dirname + '/db.json');
+
+	db.json = data;
+
+	let clientes = db.getCollection('clientes');
+
+
+	const createApp = require('vue').createApp
+
+	const app = createApp({
+		data() {
+			return {
+				message: 'Hello Vue!'
+			}
+		}
+	})
+
+	app.mount('#app')
+
+</script>
+
+</html>
