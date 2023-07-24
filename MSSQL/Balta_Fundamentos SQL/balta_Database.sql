@@ -1,0 +1,97 @@
+CREATE DATABASE [Balta]
+
+-- ATIVAR DATABASE
+USE [Balta]
+
+CREATE TABLE [Student](
+    [ID] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Name] NVARCHAR(80) NOT NULL,
+    [Email] NVARCHAR(180) NOT NULL,
+    [Document] NVARCHAR(26) NOT NULL,
+    [Phone] NVARCHAR(20) NULL,
+    [Birthdate] DATETIME NULL,
+    [CreatedDate] DATETIME NOT NULL DEFAULT GETDATE(),
+    [Active] BIT NOT NULL DEFAULT 0,
+    CONSTRAINT [PK_Student] PRIMARY KEY ([ID])
+);
+
+CREATE TABLE [Author](
+    [ID] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Name] NVARCHAR(80) NOT NULL,
+    [Title] NVARCHAR(80) NOT NULL,
+    [Image] NVARCHAR(1024) NOT NULL,
+    [Bio] NVARCHAR(2000) NOT NULL,
+    [Url] NVARCHAR(450) NULL,
+    [Email] NVARCHAR(180) NOT NULL,
+    [Type] TINYINT NOT NULL DEFAULT 1, -- TINYINT = 0 a 255
+    CONSTRAINT [PK_Author] PRIMARY KEY ([ID])
+);
+
+CREATE TABLE [Career](
+    [ID] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Title] NVARCHAR(80) NOT NULL,
+    [Summary] NVARCHAR(80) NOT NULL,
+    [Url] NVARCHAR(450) NULL,
+    [DurationInMinutes] INT NOT NULL,
+    [Active] BIT NOT NULL DEFAULT 0,
+    [Featured] BIT NOT NULL DEFAULT 0,
+    [Tags] NVARCHAR(160) NULL,
+    CONSTRAINT [PK_Career] PRIMARY KEY ([ID])
+);
+
+CREATE TABLE [Category](
+    [ID] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Title] NVARCHAR(80) NOT NULL,
+    [Url] NVARCHAR(450) NULL,
+    [Summary] NVARCHAR(80) NOT NULL,
+    [Order] INT NOT NULL,
+    [Description] TEXT NOT NULL,
+    [Featured] BIT NOT NULL DEFAULT 0,
+    CONSTRAINT [PK_Category] PRIMARY KEY ([ID])
+);
+
+CREATE TABLE [Course](
+    [ID] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Tag] NVARCHAR(160) NULL,
+    [Title] NVARCHAR(80) NOT NULL,
+    [Summary] NVARCHAR(2000) NOT NULL,
+    [Url] NVARCHAR(1024) NULL,
+    [Level] TINYINT NOT NULL,
+    [DurationInMinutes] INT NOT NULL,
+    [CreatedDate] DATETIME NOT NULL,
+    [LastUpdatedDate] DATETIME NOT NULL,
+    [Active] BIT NOT NULL,
+    [Free] BIT NOT NULL,
+    [Featured] BIT NOT NULL,
+    [AuthorID] UNIQUEIDENTIFIER NOT NULL,
+    [CategoryID] UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT [PK_Course] PRIMARY KEY ([ID]),
+    CONSTRAINT [FK_Course_Author] FOREIGN KEY ([AuthorID]) REFERENCES [Author]([ID]), -- ON DELETE CASCADE,
+    CONSTRAINT [FK_Course_Category] FOREIGN KEY ([CategoryID]) REFERENCES [Category]([ID]) -- ON DELETE NO ACTION
+);
+
+CREATE TABLE [CareerItem](
+    [CareerID] UNIQUEIDENTIFIER NOT NULL,
+    [CourseID] UNIQUEIDENTIFIER NOT NULL,
+    [Title] NVARCHAR(160) NOT NULL,
+    [Description] TEXT NOT NULL,
+    [Order] TINYINT NOT NULL,
+
+    CONSTRAINT [PK_CareerItem] PRIMARY KEY ([CourseID], [CareerID]),
+    CONSTRAINT [FK_CareerItem_Career] FOREIGN KEY ([CareerID]) REFERENCES [Career]([ID]),
+    CONSTRAINT [FK_CareerItem_Course] FOREIGN KEY ([CourseID]) REFERENCES [Course]([ID])
+);
+
+CREATE TABLE [StudentCourse](
+    [CourseID] UNIQUEIDENTIFIER NOT NULL,
+    [StudentID] UNIQUEIDENTIFIER NOT NULL,
+    [Progress] TINYINT NOT NULL,
+    [Favorite] BIT NOT NULL,
+
+    [StartDate] DATETIME NOT NULL,
+    [LastUpdateDate] DATETIME NOT NULL,
+
+    CONSTRAINT [PK_StudentCourse] PRIMARY KEY ([CourseID], [StudentID]),
+    CONSTRAINT [FK_StudentCourse_Student] FOREIGN KEY ([StudentID]) REFERENCES [Student]([ID]),
+    CONSTRAINT [FK_StudentCourse_Course] FOREIGN KEY ([CourseID]) REFERENCES [Course]([ID])
+);
