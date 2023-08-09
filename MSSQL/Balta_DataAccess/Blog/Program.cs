@@ -12,12 +12,8 @@ class Program
         var connection = new SqlConnection(CONNECTION_STRING);
         connection.Open();
 
-        //ReadUser(1);
-        //CreateUser(connection);
         ReadUsers(connection);
-        //UpdateUser();
-        //DeleteUser(3);
-
+        ReadRoles(connection);
 
 
         connection.Close();
@@ -30,70 +26,21 @@ class Program
         var users = repository.Get();
         
         foreach (var user in users)
-            Console.WriteLine(user.Name);
-        
+            Console.WriteLine(user.Name);   
     }
 
-    public static void ReadUser(int id)
+
+
+    public static void ReadRoles(SqlConnection connection)
     {
-        using (var connection = new SqlConnection(CONNECTION_STRING))
-        {
-            var user = connection.Get<User>(id);
-            System.Console.WriteLine(user.Name);
-        }
+        var repository = new RoleRepository(connection);
+        var roles = repository.Get();
+
+        foreach(var role in roles)
+            Console.WriteLine(role.Name);
+
     }
 
-    public static void CreateUser()
-    {
-        using (var connection = new SqlConnection(CONNECTION_STRING))
-        {
-            var user = new User
-            {
-                Name = "João",
-                Email = "mail_2@mail.com",
-                PasswordHash = "123456",
-                Bio = "XXXX",
-                Image = "XXXX",
-                Slug = "XXXX"
-            };
-
-            var userId = connection.Insert(user);
-            System.Console.WriteLine($"O id do user inserido é: {userId}");
-            
-        }
-    }
-
-    public static void UpdateUser()
-    {
-        using (var connection = new SqlConnection(CONNECTION_STRING))
-        {
-            var user = new User
-            {
-                Id = 4,
-                Name = "Celia Aparecida",
-                Email = "clia.60@mail.com",
-                PasswordHash = "7890",
-                Bio = "XXXX",
-                Image = "XXXX",
-                Slug = "XXXX"
-            };
-
-            var userUpdate = connection.Update<User>(user);
-            System.Console.WriteLine(userUpdate ? "O user foi atualizado com Sucesso !!" : "Erro ao atualizar o Usuario");
-
-            
-
-        }
-    }
-
-    private static void DeleteUser (int id)
-    {
-        using(var connection = new SqlConnection(CONNECTION_STRING))
-        {
-            var userDelete = connection.Delete(new User { Id = id });
-            System.Console.WriteLine(userDelete ? "O user foi deletando com Sucesso !!" : "Erro ao deleta o Usuario");
-        }
-    }
 
 
 
