@@ -6,8 +6,9 @@ export class Negociacoes{
 	adicionar(negociacao: Negociacao){
 		this.negociacoes.push(negociacao);
 	}
-
-	listar(): Array<Negociacao>{
-		return [...this.negociacoes]; // Cria uma cópia do array para evitar alterações
+	
+	// ReadonlyArray e um Array que e de somente leitura e nao pode ser alterado 
+	listar(): ReadonlyArray<Negociacao>{
+		return this.negociacoes;
 	}
 }
