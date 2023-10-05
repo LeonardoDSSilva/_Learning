@@ -13,11 +13,15 @@ export class NegociacaoController {
 		this.inputQuantidade = document.querySelector('#quantidade');
 	}
 
-	adicionar() : void {
+	public adicionar() : void {
 		const negociacao = this.criarNegociacao();
-		this.negociacoes.adicionar(negociacao);
-		this.limparFormulario();
-		console.table(this.negociacoes.listar());
+		if (negociacao.data.getDay() > 0 && negociacao.data.getDay() < 6) {
+			this.negociacoes.adicionar(negociacao);
+			this.limparFormulario();
+			this.atualizarView();
+		} else {
+			this.mensagemView.update('Negociação não pode ser feita em um sábado ou domingo!');
+		}
 	}
 
 	criarNegociacao() : Negociacao {
