@@ -16,4 +16,11 @@ export class Negociacao{
 		return this.quantidade * this.valor;
 	}
 
+	public static criarDe(dataString: string, quantidadeString: string, valorString: string): Negociacao {
+		const data = new Date(dataString.replace('-', ','));
+		const quantidade = parseInt(quantidadeString);
+		const valor = parseFloat(valorString);
+
+		return new Negociacao(data, quantidade, valor);
+	}
 }

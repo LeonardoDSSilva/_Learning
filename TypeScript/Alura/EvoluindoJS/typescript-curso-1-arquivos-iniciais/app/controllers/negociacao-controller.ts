@@ -19,7 +19,11 @@ export class NegociacaoController {
 	}
 
 	public adicionar() : void {
-		const negociacao = this.criarNegociacao();
+		const negociacao = Negociacao.criarDe(
+			this.inputData.value,
+			this.inputQuantidade.value,
+			this.inputValor.value
+		);
 		if (this.isDiaUtil(negociacao.data)) {
 			this.negociacoes.adicionar(negociacao);
 			this.limparFormulario();
@@ -27,16 +31,6 @@ export class NegociacaoController {
 		} else {
 			this.mensagemView.update('Negociação não pode ser feita em um sábado ou domingo!');
 		}
-	}
-
-	private criarNegociacao() : Negociacao {
-		// const exp = '/-/g';
-		const data = new Date(this.inputData.value.replace('-', ','));
-		const quantidade = parseInt(this.inputQuantidade.value);
-		const valor = parseFloat(this.inputValor.value);
-
-		return new Negociacao(data, quantidade, valor);
-		
 	}
 
 	private isDiaUtil(data : Date) : boolean {
