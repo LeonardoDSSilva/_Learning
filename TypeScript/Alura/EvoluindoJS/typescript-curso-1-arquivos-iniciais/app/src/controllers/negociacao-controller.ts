@@ -18,6 +18,8 @@ export class NegociacaoController {
 		this.inputQuantidade = document.querySelector('#quantidade');
 	}
 
+	@inspect // Decorator sem parâmetros
+	@logarTempoDeExecucao() // Decorator
 	public adicionar() : void {
 		const negociacao = Negociacao.criarDe(
 			this.inputData.value,
