@@ -14,11 +14,7 @@ export abstract class View<T> {
 	}
 
 	update(model : T): void {
-		let template = this.template(model);
-		if (this.script){
-			template = template.replace(/<script>[\s\S]*?<\/script>/, '')
-		}
-		this.elemento.innerHTML = template;
+		this.elemento.innerHTML = this.template(model);
 	}
 
 	protected abstract template(model : T): string;
