@@ -23,4 +23,12 @@ export class Negociacao{
 
 		return new Negociacao(data, quantidade, valor);
 	}
+	public paraTexto(): string {
+		return `
+			Data: ${new Intl.DateTimeFormat().format(this.data)}
+			Quantidade: ${this.quantidade}
+			Valor: ${this.valor}
+			Volume: ${this.volume}
+		`
+	}
 }
