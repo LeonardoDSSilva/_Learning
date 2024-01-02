@@ -32,6 +32,7 @@ export class NegociacaoController {
 		);
 		if (this.isDiaUtil(negociacao.data)) {
 			this.negociacoes.adicionar(negociacao);
+			imprimir(negociacao, this.negociacoes);
 			this.limparFormulario();
 			this.atualizarView();
 		} else {
