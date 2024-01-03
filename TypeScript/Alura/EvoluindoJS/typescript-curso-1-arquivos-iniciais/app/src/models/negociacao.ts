@@ -1,6 +1,7 @@
+import { Comparavel } from "../interfaces/comparavel.js";
 import { Imprimivel } from "../utils/imprimivel.js";
 
-export class Negociacao implements Imprimivel{
+export class Negociacao implements Imprimivel, Comparavel<Negociacao> {
 	
 	// Pode cria construtor ja com os atributos privados e com o tipo deles 
 	constructor(
