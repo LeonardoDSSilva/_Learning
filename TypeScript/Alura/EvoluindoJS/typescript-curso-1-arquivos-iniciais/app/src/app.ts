@@ -13,6 +13,16 @@ if (form){
 	throw Error('Nao foi possivel inicializar a aplicacao')
 }
 
+const botaoImporta = document.querySelector('#botao-importa');
+if (botaoImporta){
+	botaoImporta.addEventListener('click', ()=>{
+		controller.importaDados();
+	});
+}else {
+	throw Error('O Botão Importa não foi encontrado!');
+	
+}
+
 
 // const negociacoesView = new NegociacoesView;
 // const template = negociacoesView.template();
