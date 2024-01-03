@@ -19,7 +19,7 @@ export class NegociacaoController {
 	private negociacoes = new Negociacoes();
 	private negociacoesView = new NegociacoesView('#negociacoesView');
 	private mensagemView = new MensagemView('#mensagemView');
-	private negociacoesDoDia = new NegociacoesServices();
+	private negociacoesServices = new NegociacoesServices();
 
 	constructor() {
 		this.negociacoesView.update(this.negociacoes);
@@ -44,7 +44,17 @@ export class NegociacaoController {
 	}
 
 	public importaDados(): void {
-		this.negociacoesDoDia.obterNegociacoesDoDia()
+		this.negociacoesServices
+			.obterNegociacoesDoDia()
+			.then(negociacoesDeHoje => {
+				return negociacoesDeHoje.filter(negociacaoDeHoje => {
+					return !this.negociacoes
+						.listar()
+						.some(negociacao => negociacao
+								.ehIgual(negociacaoDeHoje)
+							);
+				});
+			})
 			.then(negociacoesDeHoje => {
 				for (let negociacao of negociacoesDeHoje) {
 					this.negociacoes.adicionar(negociacao);
