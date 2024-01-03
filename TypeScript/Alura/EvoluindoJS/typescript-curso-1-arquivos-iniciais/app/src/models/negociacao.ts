@@ -1,15 +1,13 @@
 import { Imprimivel } from "../utils/imprimivel.js";
 
-export class Negociacao extends Imprimivel{
+export class Negociacao implements Imprimivel{
 	
 	// Pode cria construtor ja com os atributos privados e com o tipo deles 
 	constructor(
 		private _data : Date,
 		public readonly quantidade : number,
 		public readonly valor : number
-	) {
-		super();
-	}
+	){}
 
 	public static criarDe(dataString: string, quantidadeString: string, valorString: string): Negociacao {
 		const data = new Date(dataString.replace('-', ','));
