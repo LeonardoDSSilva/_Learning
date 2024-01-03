@@ -4,27 +4,30 @@ import { logarTempoDeExecucao } from "../decorators/logar-tempo-de-execucao.js";
 import { DiasDaSemana } from "../enums/dias-da-semana.js";
 import { Negociacao } from "../models/negociacao.js";
 import { Negociacoes } from "../models/negociacoes.js";
+import { NegociacoesServices } from "../services/negociacoes-services.js";
+import { imprimir } from "../utils/imprimir.js";
 import { MensagemView } from "../views/mensagem-view.js";
 import { NegociacoesView } from "../views/negociacoes-view.js";
 
 export class NegociacaoController {
 	@domInjector('#data')
-	private inputData : HTMLInputElement;
+	private inputData: HTMLInputElement;
 	@domInjector('#valor')
-	private inputValor : HTMLInputElement;
+	private inputValor: HTMLInputElement;
 	@domInjector('#quantidade')
-	private inputQuantidade  : HTMLInputElement;
+	private inputQuantidade: HTMLInputElement;
 	private negociacoes = new Negociacoes();
 	private negociacoesView = new NegociacoesView('#negociacoesView');
 	private mensagemView = new MensagemView('#mensagemView');
+	private negociacoesDoDia = new NegociacoesServices();
 
-	constructor(){
+	constructor() {
 		this.negociacoesView.update(this.negociacoes);
 	}
 
 	@inspect // Decorator sem parâmetros
 	@logarTempoDeExecucao() // Decorator
-	public adicionar() : void {
+	public adicionar(): void {
 		const negociacao = Negociacao.criarDe(
 			this.inputData.value,
 			this.inputQuantidade.value,
@@ -40,8 +43,18 @@ export class NegociacaoController {
 		}
 	}
 
-	private isDiaUtil(data : Date) : boolean {
-		return data.getDay() > DiasDaSemana.DOMINGO 
+	public importaDados(): void {
+		this.negociacoesDoDia.obterNegociacoesDoDia()
+			.then(negociacoesDeHoje => {
+				for (let negociacao of negociacoesDeHoje) {
+					this.negociacoes.adicionar(negociacao);
+				}
+				this.negociacoesView.update(this.negociacoes);
+			});
+	}
+
+	private isDiaUtil(data: Date): boolean {
+		return data.getDay() > DiasDaSemana.DOMINGO
 			&& data.getDay() < DiasDaSemana.SABADO;
 	}
 
@@ -54,7 +67,7 @@ export class NegociacaoController {
 
 	}
 
-	private atualizarView() : void {
+	private atualizarView(): void {
 		this.negociacoesView.update(this.negociacoes);
 		this.mensagemView.update('Negociação adicionada com sucesso!');
 	}
