@@ -26,6 +26,12 @@ export class Negociacao implements Imprimivel{
 		`
 	}
 
+	public ehIgual(negociacao: Negociacao): boolean {
+		return this.data.getDate() === negociacao.data.getDate()
+			&& this.data.getMonth() === negociacao.data.getMonth()
+			&& this.data.getFullYear() === negociacao.data.getFullYear();
+	}
+
 	get data() : Date {
 		const data = new Date(this._data.getTime());
 		return data;
