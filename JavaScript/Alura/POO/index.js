@@ -1,42 +1,17 @@
+import {Cliente} from "./Cliente.js";
+import {ContaCorrente} from "./ContaCorrente.js";
 
+const cliente1 = new Cliente("Ricardo", 11122233309);
+console.log(cliente1);
 
-class Cliente {
-	
-	nome;
-	cpf;
-	constructor(nome, cpf) {
-		this.nome = nome;
-		this.cpf = cpf;
-	}
-}
+const contaCorrenteRicardo = new ContaCorrente(cliente1, 1001);
+contaCorrenteRicardo.depositar(500);
+contaCorrenteRicardo.sacar(100);
+console.log(contaCorrenteRicardo);
 
-class ContaCorrente extends Cliente {
+const conta2 = new ContaCorrente(new Cliente("Alice", 88822233309), 102);
 
-	agencia;
-	#saldo = 0;
+contaCorrenteRicardo.tranferir(200, conta2);
+console.log(conta2);
 
-	constructor(nome, cpf, agencia) {
-		super(nome, cpf);
-		this.agencia = agencia;
-	}
-
-
-	sacar(valor) {
-		if (this.#saldo >= valor) {
-			this.#saldo -= valor;
-		}
-	}
-
-	depositar(valor) {
-		if (valor <= 0) return;
-		this.#saldo += valor;
-	}
-
-}
-
-const cliente1 = new ContaCorrente('Ricardo', 11122233309, 1001);
-cliente1.depositar(500);
-
-
-
-
+console.log(ContaCorrente.numeroDeContas);
