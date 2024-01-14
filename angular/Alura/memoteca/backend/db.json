@@ -1,0 +1,88 @@
+{
+	"pensamento": [
+		{
+			"id": 1,
+			"conteudo": "O que você faria se não tivesse medo?",
+			"autoria": "Sheryl Sandberg",
+			"modelo": "modelo1"
+		},
+		{
+			"id": 2,
+			"conteudo": "Se você não pode explicar algo de forma simples, você não entendeu bem o suficiente.",
+			"autoria": "Albert Einstein",
+			"modelo": "modelo2"
+		},
+		{
+			"id": 3,
+			"conteudo": "Se você não está disposto a arriscar, esteja disposto a uma vida comum.",
+			"autoria": "Jim Rohn",
+			"modelo": "modelo3"
+		},
+		{
+			"id": 4,
+			"conteudo": "Tudo o que você sempre quis está do outro lado do medo.",
+			"autoria": "George Addair",
+			"modelo": "modelo2"
+		},
+		{
+			"id": 5,
+			"conteudo": "A pessoa que diz que algo não pode ser feito não deve interromper a pessoa que está fazendo.",
+			"autoria": "Provérbio chinês",
+			"modelo": "modelo3"
+		},
+		{
+			"id": 6,
+			"conteudo": "A vida é o que acontece com você enquanto você está ocupado fazendo outros planos.",
+			"autoria": "John Lennon",
+			"modelo": "modelo1"
+		},
+		{
+			"id": 7,
+			"conteudo": "A vida é 10% do que acontece comigo e 90% de como eu reajo a isso.",
+			"autoria": "Charles Swindoll",
+			"modelo": "modelo2"
+		},
+		{
+			"id": 8,
+			"conteudo": "Se você fizer o que sempre fez, obterá o que sempre obteve.",
+			"autoria": "Tony Robbins",
+			"modelo": "modelo3"
+		},
+		{
+			"id": 9,
+			"conteudo": "A vida é 10% do que acontece comigo e 90% de como eu reajo a isso.",
+			"autoria": "Charles Swindoll",
+			"modelo": "modelo1"
+		},
+		{
+			"id": 10,
+			"conteudo": "Se você fizer o que sempre fez, obterá o que sempre obteve.",
+			"autoria": "Tony Robbins",
+			"modelo": "modelo2"
+		},
+		{
+			"id": 11,
+			"conteudo": "A vida é 10% do que acontece comigo e 90% de como eu reajo a isso.",
+			"autoria": "Charles Swindoll",
+			"modelo": "modelo3"
+		},
+		{
+			"id": 12,
+			"conteudo": "Se você fizer o que sempre fez, obterá o que sempre obteve.",
+			"autoria": "Tony Robbins",
+			"modelo": "modelo1"
+		},
+		{
+			"id": 13,
+			"conteudo": "A vida é 10% do que acontece comigo e 90% de como eu reajo a isso.",
+			"autoria": "Charles Swindoll",
+			"modelo": "modelo2"
+		},
+		{
+			"id": 14,
+			"conteudo": "Se você fizer o que sempre fez, obterá o que sempre obteve.",
+			"autoria": "Tony Robbins",
+			"modelo": "modelo3"
+		}
+	]
+}
