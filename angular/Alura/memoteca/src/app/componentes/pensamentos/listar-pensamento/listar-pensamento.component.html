@@ -1,10 +1,9 @@
 <section class="container">
 	<header class="header d-flex">
 		<h2 class="ff-inter">Meu Mural</h2>
-		<button class="btn btn-primary btn-adicionar ff-roboto-mono"  routerLink="/criarPensamento">Adicionar</button>
+		<button class="botao"  routerLink="/criarPensamento">Adicionar</button>
 	</header>
 	<div class="mural" *ngIf="listaPensamentos.length > 0, else semPensamentos">
-		
 		<div *ngFor="let pensamento of listaPensamentos">
 			<app-pensamento [pensamento]="pensamento"></app-pensamento>
 		</div>
