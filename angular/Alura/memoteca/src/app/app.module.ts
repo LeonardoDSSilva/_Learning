@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http'; // <-- Importe o HttpClientModule
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'; // <-- Importe o FormsModule
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // <-- Importe o FormsModule
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,7 +28,8 @@ import { EditarPensamentoComponent } from './componentes/pensamentos/editar-pens
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule // <-- Importe o FormsModule
+    FormsModule, // <-- Importe o FormsModule
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
