@@ -29,7 +29,8 @@ export class CriarPensamentoComponent implements OnInit {
 				Validators.pattern(/(.|\s)*\S(.|\s)*/),
 				Validators.minLength(3),
 			])],
-			modelo: ['modelo1']
+			modelo: ['modelo1'],
+			favorito: [false]
 		});
 	}
 

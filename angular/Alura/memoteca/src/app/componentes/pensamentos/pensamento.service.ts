@@ -38,6 +38,11 @@ export class PensamentoService {
 		return this.httpClient.delete<Pensamento>(`${this.API}/${id}`);
 	}
 
+	mudarFavorito(pensamento: Pensamento): Observable<Pensamento> {
+		pensamento.favorito = !pensamento.favorito;
+		return this.editar(pensamento);
+	}
+
 	buscarPorId(id: number): Observable<Pensamento> {
 		return this.httpClient.get<Pensamento>(`${this.API}/${id}`);
 	}
