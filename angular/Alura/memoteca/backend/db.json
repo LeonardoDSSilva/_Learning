@@ -12,14 +12,14 @@
       "conteudo": "Se você não pode explicar algo de forma simples, você não entendeu bem o suficiente.",
       "autoria": "Albert Einstein",
       "modelo": "modelo2",
-      "favorito": false
+      "favorito": true
     },
     {
       "id": 3,
       "conteudo": "Se você não está disposto a arriscar, esteja disposto a uma vida comum.",
       "autoria": "Jim Rohn",
       "modelo": "modelo3",
-      "favorito": true
+      "favorito": false
     },
     {
       "id": 4,
@@ -40,7 +40,7 @@
       "conteudo": "A vida é 10% do que acontece comigo e 90% de como eu reajo a isso.",
       "autoria": "Charles Swindoll",
       "modelo": "modelo2",
-      "favorito": false
+      "favorito": true
     },
     {
       "id": 8,
