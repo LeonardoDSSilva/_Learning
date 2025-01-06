@@ -1,0 +1,1106 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"languageName":"csharp","name":"csharp"}]}}
+
+#!markdown
+
+# LINQ
+
+Operadores de consulta: 
+
+| Tipo          | Operador      |
+| ------------- | ------------- |
+| Filtro        | where, OfType |
+| Ordenação     | orderBy, orderByDescending, ThenBy, ThenByDescending, reverse |
+| Projeção      | select, selectMany |
+| Agrupamento   | group, ToLookup |
+| Junção        | join, groupJoin, zip |
+| Quantidade    | count, longCount, sum, min, max, average, aggregate |
+| Elemento      | first, firstOrDefault, last, lastOrDefault, single, singleOrDefault, elementAt, elementAtOrDefault |
+| Agregação     | all, any, contains |
+| Partição      | skip, skipWhile, take, takeWhile |
+| Conversão     | Cast, OfType, ToArray, ToList, ToDictionary, ToLookup, ToHashSet |
+| Concatenação  | Concat |
+| Equivalência  | SequenceEqual |
+| Geração      | Empty, Range, Repeat, DefaultIfEmpty |
+| Set      | Except, Distinct, Intersect, Union |
+
+#!csharp
+
+IList<string> frutas = new List<string> { "Maçã", "Banana", "Laranja", "Morango", "Uva", "Pera", "Melancia" };
+
+// QUERY SYNTAX
+var resultado = from fruta in frutas // inicia a consulta
+                where fruta.Contains("r") // operador where (filtro)
+                select fruta; // seleciona os elementos
+
+// METHOD SYNTAX 
+var resultado1 = frutas.Where(fruta => fruta.Contains("r")); 
+// Delegate: Func<string, bool> predicate = fruta => fruta.Contains("r");
+
+// foreach (var item in resultado)
+//     Console.WriteLine(item);
+
+Console.WriteLine(string.Join(", ", resultado));
+Console.WriteLine(string.Join("; ", resultado1));
+
+#!csharp
+
+// CONVERSAO
+
+// ToList converte um IEnumerable<T> para uma List<T>
+// ToArray converte um IEnumerable<T> para um Array<T>
+
+List<int> lista = new[] { 1, 2, 3 }.ToList();
+int[] array =  new List<int> { 1, 2, 3 }.ToArray();
+List<int> lista2 = new SortedSet<int> { 1, 2, 3 }.ToList();
+
+#!csharp
+
+List<string> nomes = new[] { "Maria", "João", "José", "Ana", "Carlos", "Marta", "Pedro", "Paula", "Amaral" , "Tatiana", "Debora", "Helena", "Percival", "Carlos" }.ToList();
+
+// Metodo Anonimo
+string? resultado = nomes.Find(delegate (string nome)
+                        { 
+                            return nome.StartsWith("Carlos"); 
+                        });
+Console.WriteLine(resultado);
+
+
+// Expressão Lambda
+resultado = nomes.Find(nome => nome.StartsWith("Carlos"));
+Console.WriteLine(resultado);
+
+// Delegate: Predicate< in T >, Func< in T, out TResult >, Action< in T >
+
+#!csharp
+
+List<int> numeros = new List<int> { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 };
+List<int> ListaNegra = new List<int> { 16, 128, 512 };
+
+public class Aluno
+{
+    public string Nome { get; set; }
+    public int Nota { get; set; }
+    public int Idade { get; set; }
+    public string Sexo { get; set; }
+    public DateTime Nascimento { get; set; }
+    public string Interesse { get; set; }
+    public List<string> Cursos { get; set; } = new List<string>();
+    public override string ToString() => $"Nome: {Nome}, Idade: {Idade}, Nota: {Nota}, Cursos: {string.Join(", ", Cursos)}";
+}
+
+List<Aluno> alunos = new List<Aluno>
+{
+    new Aluno { Nome = "Maria", Idade = 20, Sexo = "F", Nota = 7, Nascimento = new DateTime(2001, 6, 11), Interesse = "Front-end", Cursos = new List<string> { "HTML", "CSS", "JavaScript" }},
+    new Aluno { Nome = "João", Idade = 26, Sexo = "M", Nota = 6, Nascimento = new DateTime(2000, 2, 10), Interesse = "Back-end", Cursos = new List<string> { "C#", "EF Core" }},
+    new Aluno { Nome = "José", Idade = 24, Sexo = "M", Nota = 5, Nascimento = new DateTime(1986, 9, 30), Interesse = "Back-end", Cursos = new List<string> { "Java", "Spring Boot" }},
+    new Aluno { Nome = "Ana", Idade = 26, Sexo = "F", Nota = 9, Nascimento = new DateTime(1999, 10, 11), Interesse = "Full-stack", Cursos = new List<string> { "Python", "Django", "Flask" }},
+    new Aluno { Nome = "Carlos", Idade = 20, Sexo = "M", Nota = 4, Nascimento = new DateTime(1988, 9, 15), Interesse = "Back-end", Cursos = new List<string> { "Ruby", "Rails" }},
+    new Aluno { Nome = "Marta", Idade = 24, Sexo = "F", Nota = 10, Nascimento = new DateTime(1997, 5, 17), Interesse = "Full-stack", Cursos = new List<string> { "JavaScript", "Node.js", "React" }},
+};
+List<Aluno> alunosB = new List<Aluno>
+{
+    new Aluno { Nome = "Homero", Idade = 26, Sexo = "M", Nota = 6, Nascimento = new DateTime(1988, 9, 15), Interesse = "Games", Cursos = new List<string> { "Unity", "C#" }},
+    new Aluno { Nome = "Maria", Idade = 31, Sexo = "F", Nota = 8, Nascimento = new DateTime(2001, 9, 30), Interesse = "Mobile", Cursos = new List<string> { "Kotlin", "Android" }},
+    new Aluno { Nome = "Felicio", Idade = 17, Sexo = "M", Nota = 9, Nascimento = new DateTime(1986, 9, 30), Interesse = "Data Science", Cursos = new List<string> { "Python", "Pandas" }},
+    new Aluno { Nome = "Carlos", Idade = 27, Sexo = "M", Nota = 3, Nascimento = new DateTime(2002, 8, 15), Interesse = "Games", Cursos = new List<string> { "C++", "Unreal" }},
+    new Aluno { Nome = "Alfredo", Idade = 18, Sexo = "M", Nota = 10, Nascimento = new DateTime(1999, 10, 11), Interesse = "Front-end", Cursos = new List<string> { "TypeScript", "Angular" }},
+    new Aluno { Nome = "Denize", Idade = 30, Sexo = "F", Nota = 7, Nascimento = new DateTime(2004, 11, 5), Interesse = "Mobile", Cursos = new List<string> { "Objective-C", "Swift" }},
+};
+
+#!csharp
+
+public class Cachorro
+{
+    public string? Nome { get; set; }
+    public int Idade { get; set; }
+    public bool Vacinado { get; set; }
+    public override string ToString() => $"Nome: {Nome}, Idade: {Idade}, Vacinado: {Vacinado}";
+}
+
+public class Pessoa
+{
+    public string Nome { get; set; }
+    public Cachorro[]? Cachorros { get; set; }
+    public override string ToString() => $"Nome: {Nome}, Cachorros: {Cachorros}";
+}
+
+
+List<Pessoa> pessoas = new List<Pessoa>
+{
+    new Pessoa { Nome = "Maria",
+        Cachorros = new Cachorro[]
+        {
+            new Cachorro { Nome = "Bilu", Idade = 10 },
+            new Cachorro { Nome = "Pipoca", Idade = 14 },
+            new Cachorro { Nome = "Negão", Idade = 6 }
+        }},
+    new Pessoa { Nome = "Fernando",
+        Cachorros = new Cachorro[]
+        {
+            new Cachorro { Nome = "Canelinha", Idade = 1 }
+        }},
+    new Pessoa { Nome = "Amanda",
+        Cachorros = new Cachorro[]
+        {
+            new Cachorro { Nome = "Bisteca", Idade = 8 }
+        }},
+    new Pessoa { Nome = "Patricia",
+        Cachorros = new Cachorro[]
+        {
+            new Cachorro { Nome = "Acerola", Idade = 2 },
+            new Cachorro { Nome = "Mel", Idade = 13 }
+        }}
+};
+
+
+List<Cachorro> cachorros = new()
+{
+    new Cachorro() { Nome = "Bilu", Idade = 6, Vacinado = true },
+    new Cachorro() { Nome = "Canelinha", Idade = 3, Vacinado = false },
+    new Cachorro() { Nome = "Pipoca", Idade = 8, Vacinado = true },
+};
+
+#!csharp
+
+public class Funcionario
+{
+    public int ID { get; set; }
+    public string Nome { get; set; }
+    public string Cargo { get; set; }
+    public int? SetorID { get; set; }
+}
+
+public class Setor
+{
+    public int ID { get; set; }
+    public string Nome { get; set; }
+}
+
+List<Funcionario> funcionarios = new()
+{
+    new Funcionario { ID = 1, Nome = "Maria", Cargo = "Analista", SetorID = 1 },
+    new Funcionario { ID = 2, Nome = "João", Cargo = "Desenvolvedor", SetorID = 2 },
+    new Funcionario { ID = 3, Nome = "José", Cargo = "Gerente", SetorID = 1 },
+    new Funcionario { ID = 4, Nome = "Ana", Cargo = "Analista", SetorID = 2 },
+    new Funcionario { ID = 5, Nome = "Carlos", Cargo = "Diretor", SetorID = null },
+    new Funcionario { ID = 6, Nome = "Marta", Cargo = "Gerente", SetorID = 2 },
+    new Funcionario { ID = 7, Nome = "Homero", Cargo = "Analista", SetorID = 1 },
+    new Funcionario { ID = 8, Nome = "Felicio", Cargo = "CEO", SetorID = null },
+};
+
+List<Setor> setores = new()
+{
+    new Setor { ID = 1, Nome = "TI" },
+    new Setor { ID = 2, Nome = "RH" },
+    new Setor { ID = 3, Nome = "Financeiro" },
+};
+
+#!markdown
+
+### OPERADORES DE CONSULTA
+---
+
+#### WHERE
+- Filtra uma sequência de valores com base em um predicado.
+
+#!csharp
+
+// WHERE
+
+var resultado1 = numeros.Where(n => n < 10);
+var resultado2 = numeros.Where(n => n > 1 && n != 4 && n < 20);
+var resultado3 = numeros.Where(n => !ListaNegra.Contains(n));
+var resultado4 = numeros.Where(n => n > 1)
+                        .Where(n => n != 4)
+                        .Where(n => n < 20);
+var resultado5 = alunos.Where(a => a.Nome.StartsWith("C") &&
+                                    a.Idade < 30);
+
+Console.WriteLine($"Resultado 1: { string.Join(", ", resultado1)}\n");
+Console.WriteLine($"Resultado 2: { string.Join(", ", resultado2)}\n");
+Console.WriteLine($"Resultado 3: { string.Join(", ", resultado3)}\n");
+Console.WriteLine($"Resultado 4: { string.Join(", ", resultado4)}\n");
+// Console.WriteLine($"Resultado 5: { string.Join(", ", resultado5.Select(a => a.Nome))}\n");
+
+foreach (var aluno in resultado5)
+    Console.WriteLine($"Nome: {aluno.Nome}, Idade: {aluno.Idade}");
+
+#!markdown
+
+### OPERADORES DE PROJEÇÃO
+---
+
+Projeção: É o mecanismo usado para selecionar os dados de uma fonte de dados.
+    1. Selecionar todos os dados no estado original.
+    2. Criar um novo formato de dados realizando operações nos dados originais.
+
+Métodos:
+    1. Select
+    2. SelectMany
+
+### Select
+- Permite especificar quais propriedades de um objeto devem ser retornadas.
+- Permite realizar alguns cálculos com os dados.
+
+### SelectMany
+- Permite projetar uma sequência de sequências em uma única sequência.
+
+#!csharp
+
+IEnumerable<Aluno> alunos_ = alunos.ToList();
+
+// foreach (var aluno in alunos_)
+//     Console.WriteLine($"Nome: {aluno.Nome}, Nota: {aluno.Nota}");
+
+IEnumerable<string> nomesAlunos = alunos.Select(a => a.Nome);
+
+// foreach (var nome in nomesAlunos)
+//     Console.WriteLine($"Nome: {nome}");
+
+List<Aluno> listaAlunos = alunos.Select( a => new Aluno()
+                                {
+                                    Nome = a.Nome,
+                                    Idade = a.Idade,
+                                }).ToList();
+
+record AlunoDTO(string Nome, int Idade);
+
+List<AlunoDTO> alunosDTO = alunos.Select(a => new AlunoDTO(
+                                                    a.Nome, 
+                                                    a.Idade)).ToList();
+
+// foreach (var aluno in alunosDTO)
+    // Console.WriteLine($"Nome: {aluno.Nome}, Idade: {aluno.Idade}");
+
+
+
+// var alunosAnonimos = alunos.Select(a => new { a.Nome, a.Idade }).ToList();
+
+// foreach (var aluno in alunosAnonimos)
+//     Console.WriteLine($"Nome: {aluno.Nome}, Idade: {aluno.Idade}");
+
+
+var alunosAnonimos = alunos.Select(a => new { 
+                        Nome = a.Nome,
+                        AnoNascimento = DateTime.Now.Year - a.Idade,
+                        Nota = a.Nota,
+                        Aprovado = a.Nota >= 6 ? "Aprovado" : "Reprovado",}).ToList();
+
+foreach (var aluno in alunosAnonimos)
+    Console.WriteLine($"Nome: {aluno.Nome}, Ano Nascimento: {aluno.AnoNascimento}, Nota: {aluno.Nota}, Situação: {aluno.Aprovado}");
+
+#!csharp
+
+// SELECTMANY
+
+List<List<int>> listaDeListas = new List<List<int>>
+{
+    new List<int> { 1, 2, 3 },
+    new List<int> { 12 },
+    new List<int> { 4, 5, 6, 6 },
+    new List<int> { 7, 8, 3, 9 },
+    new List<int> { 10, 11, 12, 13 }
+};
+
+Console.WriteLine($"Tipo: {listaDeListas.GetType()}");
+
+var resultado = listaDeListas.SelectMany(lista => lista).ToList();
+
+IEnumerable<int> resultado2 = listaDeListas.SelectMany(lista => lista.Distinct());
+
+Console.WriteLine($"Resultado 1: { string.Join(", ", resultado)} do tipo {resultado.GetType()}");
+Console.WriteLine($"Resultado 2: { string.Join(", ", resultado2)} do tipo {resultado2.GetType()}");
+
+#!csharp
+
+// SELECTMANY vs SELECT
+
+var resultadoSelect = alunos.Select(a => a.Cursos);
+
+Console.WriteLine("Exemplo Select:");
+foreach (var cursos in resultadoSelect){
+    foreach (var curso in cursos)
+        Console.Write($"{curso} ");
+    Console.WriteLine();
+}
+
+var resultadoSelectMany = alunos.SelectMany(a => a.Cursos);
+
+Console.WriteLine("\nExemplo SelectMany:");
+foreach (var curso in resultadoSelectMany)
+    Console.Write($"{curso} ");
+
+#!markdown
+
+### OPERADORES DE CONJUNTO
+---
+As operações de conjunto na linguagem de consulta LINQ são usadas para combinar duas coleções de dados em uma única coleção de dados.
+
+Métodos:
+    1. Distinct ou DistinctBy: Remove os elementos duplicados de uma coleção.
+    2. Except ou ExceptBy: Retorna a diferença de conjuntos, ou seja, os elementos que estão presentes em uma coleção, mas não em outra.
+    3. Intersect ou IntersectBy: Retorna a interseção de conjuntos, ou seja, os elementos que estão presentes em ambas as coleções.
+    4. Union ou UnionBy: Retorna a união de conjuntos, ou seja, os elementos que estão presentes em qualquer uma das coleções.
+
+#!csharp
+
+// DISTINCT
+
+var idades = new[] { 30, 33, 26, 33, 35, 36, 25, 25, 40, 11, 9, 27, 30, 33, 26, 33, 35, 36, 25, 25, 40, 11, 9, 27 };
+string[] nomes = { "Paula", "MARIA", "paula", "Ana", "maria", "ANA", "João", "joão", "Joaquim", "JOAQUIM" };
+
+var idadesDistintas = idades.Distinct();
+Console.WriteLine($"\n\nIdades Distintas: { string.Join(", ", idadesDistintas)}");
+
+
+// Distinct sem sobrecarga
+var nomesDistintosSemSobrecarga = nomes.Distinct();
+// Distinct com sobrecarga
+var nomesDistintosComSobrecarga = nomes.Distinct(StringComparer.OrdinalIgnoreCase);
+
+Console.WriteLine($"\nNomes Distintos Sem Sobrecarga: { string.Join(", ", nomesDistintosSemSobrecarga)}");
+Console.WriteLine($"\nNomes Distintos Com Sobrecarga: { string.Join(", ", nomesDistintosComSobrecarga)}");
+
+// DISTINCTBY
+var alunosDistintos = alunos.DistinctBy(a => a.Idade);
+
+Console.WriteLine("\nAlunos Distintos por Idade:");
+foreach (var aluno in alunosDistintos)
+    Console.WriteLine($"Nome: {aluno.Nome}, Idade: {aluno.Idade}");
+
+#!csharp
+
+// EXCEPT
+List<int> numeros1 = new List<int> { 1, 2, 3, 4, 6, 7, 8};
+List<int> numeros2 = new List<int> { 1, 3, 5, 7, 9 };
+
+var numerosDiferentes = numeros1.Except(numeros2);
+
+Console.WriteLine($"\nNumeros Diferentes: { string.Join(", ", numerosDiferentes)}");
+
+// EXCEPT com sobrecarga
+string[] pais1 = { "Brasil", "USA", "UK", "Argentina", "China", "Russia", "India", "Canada", "Australia" };
+string[] pais2 = { "BRASIL", "uk", "Argentina", "Japão" };
+
+var paisesDiferentes = pais1.Except(pais2, StringComparer.OrdinalIgnoreCase);
+
+Console.WriteLine($"\nPaises Diferentes: { string.Join(", ", paisesDiferentes)}");
+
+
+// EXCEPTBY
+var alunosReprovados = alunos.Where(a => a.Nota < 6).Select(a => a.Nome);
+var alunosAprovados = alunos.ExceptBy(alunosReprovados, a => a.Nome);
+
+Console.WriteLine($"\nAlunos Aprovados: { string.Join(", ", alunosAprovados.Select(a => a.Nome))}");
+
+#!csharp
+
+// INTERSECT
+
+var numerosComuns = numeros1.Intersect(numeros2);
+Console.WriteLine($"\nNumeros Comuns: { string.Join(", ", numerosComuns)}");
+
+// INTERSECT com sobrecarga
+var paisesComuns = pais1.Intersect(pais2, StringComparer.OrdinalIgnoreCase);
+Console.WriteLine($"\nPaises Comuns: { string.Join(", ", paisesComuns)}");
+
+// INTERSECTBY
+var alunosComMesmoAnoNascimento = alunos.IntersectBy(alunosB.Select(a => a.Nascimento.Year), 
+                                                        a => a.Nascimento.Year);
+
+Console.WriteLine($"\nAlunos com Mesmo Ano de Nascimento: { string.Join(", ", alunosComMesmoAnoNascimento.Select(a => a.Nome))}");
+
+#!csharp
+
+// UNION
+
+var numerosUniao = numeros1.Union(numeros2);
+Console.WriteLine($"\nNumeros Uniao: { string.Join(", ", numerosUniao)}");
+
+// UNION com sobrecarga
+
+var paisesUniao = pais1.Union(pais2, StringComparer.OrdinalIgnoreCase);
+Console.WriteLine($"\nPaises Uniao: { string.Join(", ", paisesUniao)}");
+
+// UNIONBY
+
+var turmaUniao = alunos.UnionBy(alunosB, a => a.Nome);
+Console.WriteLine($"\nTurma Uniao: { string.Join(", ", turmaUniao.Select(a => a.Nome))}");
+
+#!markdown
+
+### OPERADORES DE ORDENAÇÃO
+---
+
+Ordenação: É o mecanismo usado para classificar os dados em uma ordem específica.
+
+Métodos:
+    1. OrderBy: Classifica os elementos de uma sequência em ordem crescente sem alterar a sequência original.
+    2. OrderByDescending
+    3. ThenBy
+    4. ThenByDescending
+    5. Reverse: Inverte a ordem dos elementos em uma sequência. OBS: Tem dois métodos um da LINQ e outro do System.Collections.Generic. para garantir que o método correto seja chamado, use AsEnumerable() ou AsQueryable() antes de chamar Reverse().
+
+#!csharp
+
+// ORDERBY
+var nomesOrdenadosAsc = nomes.OrderBy(n => n);
+
+// Sintaxe de Consulta
+// var nomesOrdenadosAsc = from n in nomes
+//                         orderby n
+//                         select n;
+
+Console.WriteLine($"\nNomes Ordenados Ascendentemente: { string.Join(", ", nomesOrdenadosAsc)}");
+
+// ORDERBYDESCENDING
+var nomesOrdenadosDesc = nomes.OrderByDescending(n => n);
+
+// Sintaxe de Consulta
+// var nomesOrdenadosDesc = from n in nomes
+//                          orderby n descending
+//                          select n;
+
+Console.WriteLine($"\nNomes Ordenados Descendentemente: { string.Join(", ", nomesOrdenadosDesc)}");
+
+#!csharp
+
+// THENBY
+var alunosOrdenados = alunos.OrderBy(a => a.Idade).ThenBy(a => a.Nota);
+
+// Sintaxe de Consulta
+// var alunosOrdenados = from a in alunos
+//                       orderby a.Idade, a.Nota
+//                       select a;
+
+Console.WriteLine("\nAlunos Ordenados por Idade e Nota:");
+foreach (var aluno in alunosOrdenados)
+    Console.WriteLine($"Nome: {aluno.Nome}, Idade: {aluno.Idade}, Nota: {aluno.Nota}");
+
+// THENBYDESCENDING
+var alunosOrdenadosDesc = alunos.OrderByDescending(a => a.Nota).ThenByDescending(a => a.Idade);
+
+// Sintaxe de Consulta
+// var alunosOrdenadosDesc = from a in alunos
+//                           orderby a.Nota, a.Idade descending
+//                           select a;
+
+Console.WriteLine("\nAlunos Ordenados por Nota e Idade Descendentemente:");
+foreach (var aluno in alunosOrdenadosDesc)
+    Console.WriteLine($"Nome: {aluno.Nome}, Idade: {aluno.Idade}, Nota: {aluno.Nota}");
+
+#!csharp
+
+// REVERSE
+var numerosReversos = numeros.Reverse<int>();
+
+Console.WriteLine($"\nNomes Reversos: { string.Join(", ", numerosReversos)}");
+
+
+var nomesReversos = nomes.AsEnumerable().Reverse();
+
+Console.WriteLine($"\nNomes Reversos: { string.Join(", ", nomesReversos)}");
+
+#!markdown
+
+### OPERADORES DE AGREAGAÇÃO
+---
+
+Agregação: É o mecanismo usado para realizar cálculos em uma coleção de dados.
+
+Métodos:
+    1. Count: Retorna o número de elementos em uma sequência. - O LIMITE É INT32.MAXVALUE ou seja 2.147.483.647
+    2. LongCount: Retorna o número de elementos em uma sequência como um número longo. - O LIMITE É INT64.MAXVALUE ou seja 9.223.372.036.854.775.807
+    3. Sum: Calcula a soma de todos os valores em uma sequência.
+    4. Min ou MinBy: Retorna o menor valor em uma sequência.
+    5. Max ou MaxBy: Retorna o maior valor em uma sequência.
+    6. Average: Calcula a média de todos os valores em uma sequência.
+    7. Aggregate: Aplica uma função de agregação a uma sequência.
+
+#!csharp
+
+// AGGRRGATE
+string[] cursos = { "C#", "Java", "Python", "JavaScript", "Ruby", "PHP", "Objective-C", "Swift", "Kotlin", "Dart" };
+string aggregate_ex01 = cursos.Aggregate((s1, s2) => s1 + ", " + s2);
+
+Console.WriteLine($"\nCursos: {aggregate_ex01}");
+
+int[] numeros = { 3, 5, 7, 9, 10 };
+int aggregate_ex02 = numeros.Aggregate((n1, n2) => n1 * n2);
+
+Console.WriteLine($"\nProduto: {aggregate_ex02}");
+
+string aggregate_ex03 = alunos.Aggregate<Aluno, string>(
+                                                "Alunos: ",  // valor inicial
+                                                (semente, aluno) => semente += $"{aluno.Nome}, ");
+
+int indice = aggregate_ex03.LastIndexOf(',');
+aggregate_ex03 = aggregate_ex03.Remove(indice, 1);
+
+Console.WriteLine($"\n{aggregate_ex03}");
+
+string aggregate_ex04 = alunos.Aggregate<Aluno, string, string>(
+                                                "Alunos: ",  // valor inicial
+                                                (semente, aluno) => semente += $"{aluno.Nome}, ",
+                                                resultado => resultado.TrimEnd(',', ' '));
+                                                
+Console.WriteLine($"\n{aggregate_ex04}");
+
+#!csharp
+
+// AVERAGE
+var mediaIdades = alunos.Average(a => a.Idade);
+Console.WriteLine($"\nMédia de Idades: {mediaIdades.ToString("F2")}");
+
+
+// COUNT
+var totalAlunos = alunos.Count();
+Console.WriteLine($"\nTotal de Alunos: {totalAlunos}");
+
+// COUNT com predicado - filtrando 
+var alunosComNotaMaiorQue6 = alunos.Count(a => a.Nota > 6);
+Console.WriteLine($"\nTotal de Alunos com Nota Maior que 6: {alunosComNotaMaiorQue6}");
+
+
+// LONGCOUNT
+var totalAlunosLong = alunos.LongCount();
+Console.WriteLine($"\nTotal de Alunos: {totalAlunosLong}");
+
+// LONGCOUNT com predicado - filtrando
+var alunosComNotaMaiorQue6Long = alunos.LongCount(a => a.Nota > 6);
+Console.WriteLine($"\nTotal de Alunos com Nota Maior que 6: {alunosComNotaMaiorQue6Long}");
+
+// SUM
+var somaNumeros = numeros.Sum();
+Console.WriteLine($"\nSoma de Numeros: {somaNumeros}");
+
+// SUM com predicado - filtrando
+var somaNumerosImpares = numeros.Sum(n => n % 2 != 0 ? n : 0);
+Console.WriteLine($"\nSoma de Numeros Pares: {somaNumerosImpares}");
+
+// OU TBM USANDO O WHERE
+var somaNumerosImpares2 = numeros.Where(n => n % 2 != 0).Sum();
+Console.WriteLine($"\nSoma de Numeros Pares: {somaNumerosImpares2}");
+
+// MAX
+var maiorNota = alunos.Max(a => a.Nota);
+Console.WriteLine($"\nMaior Nota: {maiorNota}");
+
+// MAX com predicado - definindo um critério
+var notaMaisAltaComMaisDe25Anos = alunosB.Max(a => a.Idade > 25 ? a.Nota : 0);
+Console.WriteLine($"\nMaior Nota com mais de 25 anos: {notaMaisAltaComMaisDe25Anos}");
+
+// MIN
+var menorNota = alunos.Min(a => a.Nota);
+Console.WriteLine($"\nMenor Nota: {menorNota}");
+
+// MIN com predicado - definindo um critério
+var notaMaisBaixaComMaisDe25Anos = alunosB.Min(a => a.Idade > 25 ? a.Nota : 0);
+Console.WriteLine($"\nMenor Nota com mais de 25 anos: {notaMaisBaixaComMaisDe25Anos}");
+
+#!csharp
+
+// MAXBY
+
+
+// MINBY
+
+#!markdown
+
+### OPERADORES DE QUANTIFICAÇÃO
+
+Quantificação: É o mecanismo usado para verificar se todos os elementos de uma coleção de dados satisfazem uma condição específica.
+
+Métodos:
+    1. All: Verifica se todos os elementos de uma sequência satisfazem uma condição específica.
+    2. Any: Verifica se há algum elemento em uma sequência que satisfaça uma condição específica.
+    3. Contains: Verifica se uma sequência contém um valor específico.
+
+#!csharp
+
+// ALL
+var todosAlunosComNotaMaiorQue5 = alunos.All(a => a.Nota > 5);
+Console.WriteLine($"\nTodos os Alunos com Nota Maior que 5: {(todosAlunosComNotaMaiorQue5 ? "Sim" : "Não")}");
+
+
+var nomesComA2 = pessoas.Where(pessoa => pessoa.Cachorros.All(pet => pet.Idade > 5))
+                        .Select(pessoa => pessoa.Nome);
+
+// Sintaxe de Consulta
+var nomesComA = from pessoa in pessoas
+                where pessoa.Cachorros.All(pet => pet.Idade > 5)
+                select pessoa.Nome;
+
+Console.WriteLine($"\nNomes com Cachorros com Idade Maior que 5: { string.Join(", ", nomesComA)}");
+
+#!csharp
+
+// ANY  
+var algumAlunoComIdadeMenorQue18 = alunosB.Any(a => a.Idade < 18);
+Console.WriteLine($"\nAlgum Aluno com Idade Menor que 18: {(algumAlunoComIdadeMenorQue18 ? "Sim" : "Não")}");
+
+// ANY com predicado - definindo um critério
+var algumAlunoComNotaMaiorQue8 = alunosB.Any(a => a.Nota > 8);
+Console.WriteLine($"\nAlgum Aluno com Nota Maior que 8: {(algumAlunoComNotaMaiorQue8 ? "Sim" : "Não")}");
+
+bool naoVacinaCachorro = cachorros.Any(c => c.Idade > 2 && !c.Vacinado);
+Console.WriteLine($"\n{(naoVacinaCachorro ? "Existe" : "Não Existe")} cães com mais de 2 anos e não vacinados");
+
+#!csharp
+
+// CONTAINS
+
+var resultado = numeros.Contains(5);
+Console.WriteLine($"\nO número 5 está na lista? {(resultado ? "Sim" : "Não")}");
+
+var resultado2 = cachorros.Contains(new Cachorro { Nome = "Bilu", Idade = 6, Vacinado = true });
+Console.WriteLine($"\nO cachorro Bilu está na lista? {(resultado2 ? "Sim" : "Não")}");
+
+
+public class CachorroEqualityComparer : IEqualityComparer<Cachorro>
+{
+    public bool Equals(Cachorro x, Cachorro y) => x.Nome == y.Nome && x.Idade == y.Idade;
+    public int GetHashCode(Cachorro obj) => obj.Nome.GetHashCode() ^ obj.Idade.GetHashCode();
+}
+
+var resultado3 = cachorros.Contains(new Cachorro { Nome = "Bilu", Idade = 6, Vacinado = true }, new CachorroEqualityComparer());
+Console.WriteLine($"\nO cachorro Bilu está na lista? {(resultado3 ? "Sim" : "Não")}");
+
+#!markdown
+
+### OPERADORES DE AGRUPAMENTO
+---
+
+Agrupamento: É o mecanismo usado para agrupar os elementos de uma coleção de dados com base em uma chave específica.
+
+Métodos:
+    1. GroupBy: Agrupa os elementos de uma sequência com base em uma chave específica.
+    2. ToLookup: Cria um Lookup<TKey, TElement> a partir de uma sequência.
+
+#!csharp
+
+// GROUPBY
+
+var alunosPorIdade = alunos.GroupBy(a => a.Idade);
+Console.WriteLine("\nAlunos Agrupados por Idade:");
+foreach (var grupo in alunosPorIdade)
+{
+    Console.WriteLine($"Idade: {grupo.Key} - ({grupo.Count()})");
+    foreach (var aluno in grupo)
+        Console.WriteLine($"  Nome: {aluno.Nome}");
+}
+
+// Sintaxe de Método
+var alunosPorSexo = alunos.GroupBy(a => a.Sexo)
+                        .OrderBy(g => g.Key) // ordena as chaves do grupo (sexo)
+                        .Select(std => new 
+                        { 
+                            Sexo = std.Key, // mudando o nome da propriedade
+                            Alunos = std.OrderBy(a => a.Nome) // ordena os alunos por nome
+                        });
+
+// Sintaxe de Consulta
+// var alunosPorSexo = from aluno in alunos
+//                     group aluno by aluno.Sexo into grupo
+//                     orderby grupo.Key
+//                     select new { Sexo = grupo.Key, Alunos = grupo.OrderBy(a => a.Nome) };
+
+Console.WriteLine("\nAlunos Agrupados por Sexo:");
+foreach (var grupo in alunosPorSexo)
+{
+    Console.WriteLine($"Sexo: {grupo.Sexo} - ({grupo.Alunos.Count()}):");
+    foreach (var aluno in grupo.Alunos)
+        Console.WriteLine($"  Nome: {aluno.Nome}");
+}
+
+#!csharp
+
+// GROUPBY com múltiplas chaves
+
+var unirTurmas = alunos.Union(alunosB);
+var alunosPorSexoIdade = unirTurmas.GroupBy(a => new { a.Interesse, a.Sexo })
+                                    .OrderBy(g => g.Key.Interesse)
+                                    .ThenBy(g => g.Key.Sexo)
+                                    .Select(std => new 
+                                    { 
+                                        Interesse = std.Key.Interesse,
+                                        Sexo = std.Key.Sexo,
+                                        Alunos = std.OrderBy(a => a.Nome)
+                                    });
+
+Console.WriteLine("\nAlunos Agrupados por Interesse e Sexo:");
+foreach (var grupo in alunosPorSexoIdade)
+{
+    Console.WriteLine($"Interesse: {grupo.Interesse}, Sexo: {grupo.Sexo} - ({grupo.Alunos.Count()}):");
+    foreach (var aluno in grupo.Alunos)
+        Console.WriteLine($"  Nome: {aluno.Nome}");
+}
+
+#!csharp
+
+// TOLOOKUP
+
+var alunosPorSexoLookup = alunos.Union(alunosB).ToLookup(a => a.Sexo);
+
+Console.WriteLine("\nAlunos Agrupados por Sexo (Lookup):");
+foreach (var grupo in alunosPorSexoLookup)
+{
+    Console.WriteLine($"Sexo: {grupo.Key} - ({grupo.Count()})");
+    foreach (var aluno in grupo)
+        Console.WriteLine($"  Nome: {aluno.Nome}");
+}
+
+#!markdown
+
+### OPERADORES DE JUNÇÃO
+---
+
+Junção: É o mecanismo usado para combinar os elementos de duas coleções de dados com base em uma chave específica.
+
+Métodos:
+    1. Join: Combina os elementos de duas sequências com base em uma chave comum.
+    2. GroupJoin: Realiza uma junção entre duas sequências com base em uma chave comum.
+
+#!csharp
+
+// JOIN - INNER JOIN
+var innerJoin = funcionarios.Join(setores, 
+                                    f => f.SetorID, 
+                                    s => s.ID, 
+                                    (f, s) => new { f.Nome, f.Cargo, Setor = s.Nome }); // Projetando os resultados com um objeto anônimo
+
+// Sintaxe de Consulta
+// var innerJoin = from funcionario in funcionarios
+//                 join setor in setores on funcionario.SetorID equals setor.ID
+//                 select new { funcionario.Nome, funcionario.Cargo, Setor = setor.Nome };
+
+
+Console.WriteLine("\nInner Join:");
+foreach (var item in innerJoin)
+    Console.WriteLine($"Nome: {item.Nome}, Cargo: {item.Cargo}, Setor: {item.Setor}");
+
+#!csharp
+
+// JOIN - LEFT JOIN
+var leftJoin = funcionarios
+    .GroupJoin(setores,
+        funcionario => funcionario.SetorID,
+        setor => setor.ID,
+        (funcionario, setor) => new { funcionario, setor })
+    .SelectMany(x => x.setor.DefaultIfEmpty(), 
+        (funcionario, setor) => new { Nome = funcionario.funcionario.Nome, Cargo = funcionario.funcionario.Cargo, Setor = setor?.Nome ?? "Sem Setor" })
+    .ToList();
+
+// Sintaxe de Consulta
+// var leftJoin = from funcionario in funcionarios
+//                join setor in setores on funcionario.SetorID equals setor.ID into setorGrupo
+//                from setor in setorGrupo.DefaultIfEmpty()
+//                select new { funcionario.Nome, funcionario.Cargo, Setor = setor?.Nome ?? "Sem Setor" };
+
+Console.WriteLine("\nLeft Join:");
+foreach (var item in leftJoin)
+    Console.WriteLine($"Nome: {item.Nome}, Cargo: {item.Cargo}, Setor: {item.Setor}");
+
+#!csharp
+
+// JOIN - RIGHT JOIN
+var rightJoin = setores
+    .GroupJoin(funcionarios,
+        setor => setor.ID,
+        funcionario => funcionario.SetorID,
+        (setor, funcionario) => new { setor, funcionario })
+    .SelectMany(x => x.funcionario.DefaultIfEmpty(), 
+        (setor, funcionario) => new { Nome = funcionario?.Nome ?? "Sem Funcionário", Cargo = funcionario?.Cargo ?? "Sem Funcionário", Setor = setor.setor.Nome })
+    .ToList();
+
+// Sintaxe de Consulta
+// var rightJoin = from setor in setores
+//                 join funcionario in funcionarios on setor.ID equals funcionario.SetorID into funcionarioGrupo
+//                 from funcionario in funcionarioGrupo.DefaultIfEmpty()
+//                 select new { Setor = setor.Nome, Nome = funcionario?.Nome ?? "Sem Funcionário", Cargo = funcionario?.Cargo ?? "Sem Funcionário" };
+
+Console.WriteLine("\nRight Join:");
+foreach (var item in rightJoin)
+    Console.WriteLine($"Nome: {item.Nome}, Cargo: {item.Cargo}, Setor: {item.Setor}");
+
+#!csharp
+
+// JOIN - FULL JOIN
+var fullJoin = leftJoin.Union(rightJoin).ToList();
+
+Console.WriteLine("\nFull Join:");
+foreach (var item in fullJoin)
+    Console.WriteLine($"Nome: {item.Nome}, Cargo: {item.Cargo}, Setor: {item.Setor}");
+
+#!csharp
+
+// CROSS JOIN
+var crossJoin = from funcionario in funcionarios
+                from setor in setores
+                select new { Nome = funcionario.Nome, Cargo = funcionario.Cargo, Setor = setor.Nome };
+
+// Sintaxe de Método
+// var crossJoin = funcionarios.SelectMany(f => setores, (f, s) => new { Nome = f.Nome, Cargo = f.Cargo, Setor = s.Nome });
+
+Console.WriteLine("\nCross Join:");
+foreach (var item in crossJoin)
+    Console.WriteLine($"Nome: {item.Nome}, Cargo: {item.Cargo}, Setor: {item.Setor}");
+
+#!csharp
+
+// GROUPJOIN
+
+var groupJoin = setores.GroupJoin(funcionarios,
+                                    s => s.ID,
+                                    f => f.SetorID,
+                                    (setor, funcionarios) => new { Setor = setor.Nome, Funcionarios = funcionarios });
+
+// Sintaxe de Consulta
+// var groupJoin = from setor in setores
+//                 join funcionario in funcionarios on setor.ID equals funcionario.SetorID into funcionarios
+//                 select new { Setor = setor.Nome, Funcionarios = funcionarios };
+
+Console.WriteLine("\nGroup Join:");
+foreach (var item in groupJoin)
+{
+    Console.WriteLine($"Setor: {item.Setor}");
+    foreach (var funcionario in item.Funcionarios)
+        Console.WriteLine($"  Nome: {funcionario.Nome}, Cargo: {funcionario.Cargo}");
+}
+
+#!markdown
+
+### OPERADORES DE ELEMENTO
+---
+
+Elemento: É o mecanismo usado para obter um único elemento de uma coleção de dados.
+
+Métodos:
+    1. First: Retorna o primeiro elemento de uma sequência.
+    2. FirstOrDefault: Retorna o primeiro elemento de uma sequência ou um valor padrão se a sequência estiver vazia.
+    3. Last: Retorna o último elemento de uma sequência.
+    4. LastOrDefault: Retorna o último elemento de uma sequência ou um valor padrão se a sequência estiver vazia.
+    5. Single: Retorna o único elemento de uma sequência.
+    6. SingleOrDefault: Retorna o único elemento de uma sequência ou um valor padrão se a sequência estiver vazia.
+    7. ElementAt: Retorna o elemento em uma posição específica em uma sequência.
+    8. ElementAtOrDefault: Retorna o elemento em uma posição específica em uma sequência ou um valor padrão se a posição estiver fora dos limites da sequência.
+
+> Use sempre o método que termina com "OrDefault" para evitar exceções pois se a sequência estiver vazia, o método retornará o valor padrão.
+
+#!csharp
+
+// ELEMENTAT
+
+var terceiroAluno = alunos.ElementAtOrDefault(2);
+Console.WriteLine($"\nTerceiro Aluno: {terceiroAluno}");
+
+var terceiroAlunoNome = alunos.Select(a => a.Nome).ElementAtOrDefault(2);
+Console.WriteLine($"\nNome do Terceiro Aluno: {terceiroAlunoNome}");
+
+#!csharp
+
+// FIRST
+var primeiroAluno = alunos.FirstOrDefault();
+Console.WriteLine($"\nPrimeiro Aluno: {primeiroAluno}");
+
+var primeiroAlunoComNotaMaiorQue8 = alunos.FirstOrDefault(a => a.Nota > 8);
+Console.WriteLine($"\nPrimeiro Aluno com Nota Maior que 8: {primeiroAlunoComNotaMaiorQue8.Nome}");
+
+#!csharp
+
+// LAST
+var ultimoAluno = alunos.LastOrDefault();
+Console.WriteLine($"\nÚltimo Aluno: {ultimoAluno}");
+
+var ultimoAlunoComNotaMaiorQue8 = alunos.LastOrDefault(a => a.Nota > 8);
+Console.WriteLine($"\nÚltimo Aluno com Nota Maior que 8: {ultimoAlunoComNotaMaiorQue8.Nome}");
+
+#!csharp
+
+// SINGLEORDEFAULT
+var alunoUnico = alunos.SingleOrDefault(a => a.Nome == "Maria");
+Console.WriteLine($"\nAluno Único: {alunoUnico?.Nome}");
+
+var alunoUnicoComNotaMaiorQue8 = alunos.SingleOrDefault(a => a.Nota > 9);
+Console.WriteLine($"\nAluno Único com Nota Maior que 8: {alunoUnicoComNotaMaiorQue8}");
+
+#!csharp
+
+// DEFAULTIFEMPTY
+
+var alunosVazios = alunos.Where(a => a.Nome == "Fernando");
+var alunosFiltrados = alunosVazios.DefaultIfEmpty(new Aluno { Nome = "Aluno Não Encontrado" });
+Console.WriteLine("\nAlunos Filtrados:");
+foreach (var aluno in alunosFiltrados)
+    Console.WriteLine($"Nome: {aluno.Nome}");
+
+var numerosVazios = numeros.Where(n => n > 10000);
+var numerosFiltrados = numerosVazios.DefaultIfEmpty(0);
+
+Console.WriteLine($"\nNumeros Filtrados: { string.Join(", ", numerosFiltrados)}");
+
+#!markdown
+
+### OPERADORES DE PARTICIONAMENTO
+---
+
+Particionamento: É o mecanismo usado para dividir uma coleção de dados em partes menores.
+
+Métodos:
+    1. Skip: Ignora um número especificado de elementos em uma sequência e retorna os elementos restantes.
+    2. SkipWhile: Ignora os elementos em uma sequência até que uma condição específica seja falsa e, em seguida, retorna os elementos restantes.
+    3. Take: Retorna um número especificado de elementos de uma sequência.
+    4. TakeWhile: Retorna os elementos em uma sequência até que uma condição específica seja falsa.
+
+#!csharp
+
+// TAKE
+
+var tresPrimeirosAlunos = alunos.Take(3);
+Console.WriteLine("\nTrês Primeiros Alunos:");
+foreach (var aluno in tresPrimeirosAlunos)
+    Console.WriteLine($"Nome: {aluno.Nome}");
+
+var tresPrimeirosNumerosOrdenadosDesc = numeros.OrderByDescending(n => n).Take(3);
+Console.WriteLine($"\nTrês Primeiros Numeros Ordenados Descendentemente: { string.Join(", ", tresPrimeirosNumerosOrdenadosDesc)}");
+
+#!csharp
+
+// TAKEWHILE
+var numerosmenoresQue5 = numeros.TakeWhile(n => n < 5);
+Console.WriteLine($"\nNumeros Menores que 5: { string.Join(", ", numerosmenoresQue5)}");
+
+// TAKEWHILE com índice
+var nomesTamMaioresQue5 = nomes.TakeWhile((nome, indice) => nome.Length > indice);
+Console.WriteLine($"\nNomes com Tamanho Maior que o Índice: { string.Join(", ", nomesTamMaioresQue5)}");
+
+#!csharp
+
+// SKIP
+var numerosPulandoOs3Primeiros = numeros.Skip(3);
+Console.WriteLine($"\nNumeros Pulando os 3 Primeiros: { string.Join(", ", numerosPulandoOs3Primeiros)}");
+
+// SKIP com filtragem
+var numerosPulandoOs3MenoressQue5 = numeros.Skip(3).Where(n => n < 10);
+Console.WriteLine($"\nNumeros Pulando os Menores que 5: { string.Join(", ", numerosPulandoOs3MenoressQue5)}");
+
+#!csharp
+
+// SKIPWHILE
+numeros.Add(3);
+var numerosPulandoOs3PrimeirosMenoresQue5 = numeros.SkipWhile(n => n < 5);
+Console.WriteLine($"\nNumeros Pulando os 3 Primeiros Menores que 5: { string.Join(", ", numerosPulandoOs3PrimeirosMenoresQue5)}");
+
+// SKIPWHILE com índice
+var nomesPulandoOs3PrimeirosMenoresQueIndice = nomes.SkipWhile((nome, indice) => nome.Length > indice);
+Console.WriteLine($"\nNomes Pulando os 3 Primeiros Menores que o Índice: { string.Join(", ", nomesPulandoOs3PrimeirosMenoresQueIndice)}");
+
+#!csharp
+
+// EXEMPLO DE USO DE SKIP E TAKE
+int np = 4; // Número da Página
+int rp = 3; // Registros por Página
+
+var alunosPaginados = alunos.Union(alunosB).Skip((np - 1) * rp).Take(rp);
+Console.WriteLine("\nAlunos Paginados:");
+foreach (var aluno in alunosPaginados)
+    Console.WriteLine($"Nome: {aluno.Nome}");
+
+#!markdown
+
+### OPERADORES DE GERAÇÃO
+---
+
+Geração: É o mecanismo usado para criar uma coleção de dados com base em um padrão específico.
+
+Métodos:
+    1. Empty: Retorna uma sequência vazia.
+    2. Range: Gera uma sequência de números inteiros em um intervalo específico.
+    3. Repeat: Gera uma sequência que contém um valor específico repetido um número específico de vezes.
+
+#!csharp
+
+// RANGE
+var numerosDe0A9 = Enumerable.Range(0, 10);
+Console.WriteLine($"\nNumeros de 0 a 9: { string.Join(", ", numerosDe0A9)}");
+
+// RANGE com filtro
+var numerosParesDe10A30 = Enumerable.Range(10, 21).Where(n => n % 2 == 0);
+Console.WriteLine($"\nNumeros Pares de 10 a 30: { string.Join(", ", numerosParesDe10A30)}");
+
+var numerosQuadradosDe1A10 = Enumerable.Range(1, 10).Select(n => n * n);
+Console.WriteLine($"\nNumeros Quadrados de 1 a 10: { string.Join(", ", numerosQuadradosDe1A10)}");
+
+#!csharp
+
+// REPEAT
+var numerosRepetidos = Enumerable.Repeat(5, 10);
+Console.WriteLine($"\nNumeros Repetidos: { string.Join(", ", numerosRepetidos)}");
+
+var nomesRepetidos = Enumerable.Repeat("Maria", 5);
+Console.WriteLine($"\nNomes Repetidos: { string.Join(", ", nomesRepetidos)}");
+
+#!csharp
+
+// EMPTY
+
+var listaVazia = Enumerable.Empty<int>();
+Console.WriteLine($"\nLista Vazia: { string.Join(", ", listaVazia)}");
+
+var listaVaziaDeAlunos = Enumerable.Empty<Aluno>();
+Console.WriteLine($"\nLista Vazia de Alunos: { string.Join(", ", listaVaziaDeAlunos)}");
+
+#!markdown
+
+### OPERADORES DE CONVERSÃO
+
+Conversão: É o mecanismo usado para converter uma coleção de dados em outro tipo de coleção de dados.
+
+
+Métodos:
+    1. Append: Adiciona um elemento ao final de uma sequência.
+    2. Prepend: Adiciona um elemento ao início de uma sequência.
+    3. Zip: Combina duas sequências em uma única sequência.
+
+#!csharp
+
+// ZIP
+
+int[] numeros1 = { 10, 20, 30, 40, 50 };
+string[] expressoes = { "dez", "vinte", "trinta", "quarenta" }; 
+
+var numerosPorExtenso = numeros1.Zip(expressoes, (n, e) => $"{n} - {e}");
+Console.WriteLine("\nNumeros por Extenso:");
+foreach (var item in numerosPorExtenso)
+    Console.WriteLine(item);
+
+
+var seq1 = new[] { 1, 2, 3 };
+var seq2 = new[] { 10, 20, 30, 40, 50 };
+
+var resultadoZip = seq1.Zip(seq2, (n1, n2) => n1 * n2);
+Console.WriteLine($"\nResultado Zip: { string.Join(", ", resultadoZip)}");
+
+#!markdown
+
+### NEW C# 13
+
+#!csharp
+
+// Console.WriteLine("\nAggregateBy\n");
+
+// var numeros = new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+// var resultado = numeros.AggregateBy(
+//     keySelector: n => n % 2 == 0 ? "Par" : "Ímpar",
+//     seed: 0,
+//     func: (contagem, _) => contagem + 1);
+
+// foreach (var item in resultado)
+// {
+//     Console.WriteLine($"{item.Key}: {item.Value}");
+// }
+
+// Console.ReadLine();
